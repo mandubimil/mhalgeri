@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pretty_json/pretty_json.dart';
 import 'getx_controller.dart';
 import 'package:get/get.dart';
 import 'db_helper.dart';
@@ -16,34 +17,66 @@ class BottomNavi extends StatelessWidget {
             IconButton(
                 icon: Icon(Icons.auto_awesome_motion),
                 onPressed: () {
-                  db.selectListMain('''select * from halgeri_main where gubun != 'memo' order by createTime desc''', [], 'all');
+                  db.selectListMain(
+                      '''select * from halgeri_main where gubun != 'memo' and dan is null order by createTime desc''',
+                      [],
+                      'all');
                 }),
-            SizedBox(width: 5,),
+            SizedBox(
+              width: 3,
+            ),
             IconButton(
                 icon: Icon(Icons.person),
                 onPressed: () {
-                  db.selectListMain('select * from halgeri_main where gubun = ? order by createTime desc', ['public'], 'public');
+                  db.selectListMain(
+                      '''select * from halgeri_main where gubun = ? and dan is null order by createTime desc''',
+                      ['private'],
+                      'private');
                 }),
-            SizedBox(width: 5,),
+            SizedBox(
+              width: 3,
+            ),
             IconButton(
                 icon: Icon(Icons.work),
                 onPressed: () {
-                  db.selectListMain('select * from halgeri_main where gubun = ? order by createTime desc', ['private'], 'pirvate');
+                  db.selectListMain(
+                      '''select * from halgeri_main where gubun = ? and dan is null order by createTime desc''',
+                      ['public'],
+                      'public');
                 }),
-            SizedBox(width: 5,),
-            IconButton(icon: Icon(Icons.code), onPressed: (){
-              db.selectListMain('select * from halgeri_main where gubun = ? order by createTime desc', ['fun'], 'fun');
-            }),
-            SizedBox(width: 5,),
+            SizedBox(
+              width: 3,
+            ),
             IconButton(
-                icon: Icon(Icons.download_done_outlined), onPressed: (){
-              db.selectListMain('select * from halgeri_main where dan = ? order by createTime desc', ['end'], 'end');
-            }),
-            SizedBox(width: 5,),
+                icon: Icon(Icons.code),
+                onPressed: () {
+                  db.selectListMain(
+                      '''select * from halgeri_main where gubun = ? and dan is null order by createTime desc''',
+                      ['fun'],
+                      'fun');
+                }),
+            SizedBox(
+              width: 3,
+            ),
             IconButton(
-                icon: Icon(Icons.article_outlined), onPressed: (){
-              db.selectListMain('select * from halgeri_main where gubun = ? order by createTime desc', ['memo'], 'memo');
-            }),
+                icon: Icon(Icons.download_done_outlined),
+                onPressed: () {
+                  db.selectListMain(
+                      '''select * from halgeri_main where dan = ? order by createTime desc''',
+                      ['end'],
+                      'end');
+                }),
+            SizedBox(
+              width: 3,
+            ),
+            IconButton(
+                icon: Icon(Icons.article_outlined),
+                onPressed: () {
+                  db.selectListMain(
+                      '''select * from halgeri_main where gubun = ? and dan is null order by createTime desc''',
+                      ['memo'],
+                      'memo');
+                }),
           ],
         ));
   }

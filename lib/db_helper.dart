@@ -18,18 +18,86 @@ class DBHelper {
         onCreate: (db, version) async {
           await db.execute('''
           CREATE TABLE halgeri_main
-          (id INTEGER PRIMARY KEY AUTOINCREMENT, dan TEXT, gubun TEXT, content TEXT, createTime TEXT, editTime TEXT)''');
+          (
+          dan TEXT, 
+          gubun TEXT, 
+          content TEXT, 
+          createTime TEXT not null, 
+          editTime TEXT not null, 
+          bigo TEXT
+          )''');
 
           await db.execute('''
           CREATE TABLE halgeri_sub
-          (id INTEGER PRIMARY KEY AUTOINCREMENT, main_id INTEGER, gubun TEXT, content TEXT, createTime TEXT, editTime TEXT)''');
+          (
+          main_createTime TEXT not null, 
+          gubun TEXT, 
+          content TEXT, 
+          createTime TEXT not null, 
+          editTime TEXT not null, 
+          bigo TEXT
+          )''');
+
+          await db.execute('''
+          CREATE TABLE halgeri_config
+          (
+          uid TEXT not null, 
+          pass TEXT not null, 
+          bigo TEXT
+          )''');
         },
         onUpgrade: (db, oldVersion, newVersion){}
     );
 
-    print(await getDatabasesPath());
-
     return _db;
+  }
+
+  Future<int> selectListMainBack(String backGubun) async {
+    final db = await database;
+    GC _gx = Get.put(GC());
+
+    dynamic rows;
+    String Title;
+    if (backGubun == 'init'){
+      rows = await db.rawQuery('''select * from halgeri_main where gubun != 'memo' and dan is null order by createTime desc''',
+          []);
+      Title = 'all';
+    }
+    else if (backGubun == 'public'){
+      rows = await db.rawQuery('''select * from halgeri_main where gubun == 'public' and dan is null order by createTime desc''',
+          []);
+      Title = 'public';
+    }
+    else if (backGubun == 'private'){
+      rows = await db.rawQuery('''select * from halgeri_main where gubun == 'private' and dan is null order by createTime desc''',
+          []);
+      Title = 'private';
+    }
+    else if (backGubun == 'fun'){
+      rows = await db.rawQuery('''select * from halgeri_main where gubun == 'fun' and dan is null order by createTime desc''',
+          []);
+      Title = 'public';
+    }
+    else if (backGubun == 'end'){
+      rows = await db.rawQuery('''select * from halgeri_main where dan == 'end'order by createTime desc''',
+          []);
+      Title = 'end';
+    }
+    else if (backGubun == 'memo'){
+      rows = await db.rawQuery('''select * from halgeri_main where gubun == 'memo' and dan is null order by createTime desc''',
+          []);
+      Title = 'memo';
+    }
+
+    _gx.mainItems.clear();
+    print(rows);
+
+    for (var i=0; i<rows.length; i++){
+      _gx.mainItems.add([rows[i]['gubun'], rows[i]['content'], rows[i]['createTime'].toString()]);
+    }
+
+    _gx.appbarTitle('${Title} : ${rows.length.toString()}');
+    return rows.length;
   }
 
   Future<int> selectListMain(String pSqlText, List pSqlJo, String Title) async {
@@ -42,12 +110,38 @@ class DBHelper {
     print(rows);
 
     for (var i=0; i<rows.length; i++){
-      _gx.mainItems.add([rows[i]['gubun'], rows[i]['content'], rows[i]['id'].toString()]);
+      _gx.mainItems.add([rows[i]['gubun'], rows[i]['content'], rows[i]['createTime'].toString()]);
     }
 
     _gx.appbarTitle('${Title} : ${rows.length.toString()}');
     return rows.length;
   }
+
+  Future<int> selectListSub(String pSqlText, List pSqlJo) async {
+    final db = await database;
+    GC _gx = Get.put(GC());
+
+    var rows = await db.rawQuery(pSqlText, pSqlJo);
+
+    _gx.subItems.clear();
+    print(rows);
+
+    for (var i=0; i<rows.length; i++){
+      _gx.subItems.add([rows[i]['gubun'], rows[i]['content'], rows[i]['createTime'].toString()]);
+    }
+
+    return rows.length;
+  }
+
+  Future<List<Map<String, dynamic>>> selectRows(String pSqlText, List pSqlJo) async {
+    final db = await database;
+    GC _gx = Get.put(GC());
+
+    List<Map<String, dynamic>> rows = await db.rawQuery(pSqlText, pSqlJo);
+
+    return rows;
+  }
+
 
   Future<int> insert(String pSqlText, List pSqlJo) async {
     final db = await database;
@@ -56,6 +150,21 @@ class DBHelper {
     return res;
   }
 
+  Future<int> delete(String pSqlText, List pSqlJo) async {
+    final db = await database;
+
+    var res = await db.rawDelete(pSqlText, pSqlJo);
+    return res;
+  }
+
+  Future<int> doDeleteInsert(String pSqlText1, List pSqlJo1, String pSqlText2, List pSqlJo2) async {
+    final db = await database;
+
+    var res1 = await db.rawDelete(pSqlText1, pSqlJo1);
+    var res2 = await db.rawInsert(pSqlText2, pSqlJo2);
+
+    return res1;
+  }
 
 }
 

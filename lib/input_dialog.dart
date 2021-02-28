@@ -23,14 +23,13 @@ class InputDialog extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      print('1');
-                      _gx.radioGubun('public');
+                      _gx.radioGubun('private');
                     },
                     child: Obx(
                       () => Container(
                         height: 56,
                         width: 56,
-                        color: _gx.radioGubun.toString() == 'public'
+                        color: _gx.radioGubun.toString() == 'private'
                             ? Colors.blue[300]
                             : Colors.transparent,
                         child: Icon(Icons.person),
@@ -40,13 +39,13 @@ class InputDialog extends StatelessWidget {
                   SizedBox(width: 4),
                   GestureDetector(
                     onTap: () {
-                      _gx.radioGubun('private');
+                      _gx.radioGubun('public');
                     },
                     child: Obx(
                       () => Container(
                         height: 56,
                         width: 56,
-                        color: _gx.radioGubun.toString() == 'private'
+                        color: _gx.radioGubun.toString() == 'public'
                             ? Colors.blue[300]
                             : Colors.transparent,
                         child: Icon(Icons.work),
@@ -123,7 +122,8 @@ class InputDialog extends StatelessWidget {
                                         ''',
                               [_gx.radioGubun.toString(), textContent.text]);
 
-                          db.selectListMain('select * from halgeri_main order by createTime desc', [], 'all');
+                          db.selectListMainBack(_gx.radioGubun.toString());
+
                           Navigator.of(context).pop();
                         }
                       }),

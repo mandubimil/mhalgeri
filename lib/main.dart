@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'main_listview.dart';
 import 'halgeri_drawer.dart';
 import 'input_dialog.dart';
+import 'search_dialog.dart';
 import 'detail_halgeri.dart';
 
 void main() {
@@ -29,6 +30,8 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+  final textContent = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     GC _gx = Get.put(GC());
@@ -39,6 +42,15 @@ class HomePage extends StatelessWidget {
         title: Obx(
           () => Text('${_gx.appbarTitle}'),
         ),
+        actions: [
+          IconButton(icon: Icon(Icons.search), onPressed: (){
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return SearchDialog();
+                });
+          })
+        ]
       ),
       body: Container(color: Colors.grey[100], child: MainListView()),
       bottomNavigationBar: BottomNavi(),

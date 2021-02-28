@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'getx_controller.dart';
 import 'package:get/get.dart';
+import 'db_helper.dart';
 
 class MainListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GC _gx = Get.put(GC());
+    DBHelper db = DBHelper();
+    db.selectListMainBack('init');
 
     return Column(
       children: [
@@ -20,9 +23,10 @@ class MainListView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     child: ListTile(
                       tileColor: Colors.grey[30],
-                      leading: Icon(_gx.mainItems[index][0].toString() == 'public'
+                      leading: Icon(_gx.mainItems[index][0].toString() ==
+                              'private'
                           ? Icons.person
-                          : _gx.mainItems[index][0].toString() == 'private'
+                          : _gx.mainItems[index][0].toString() == 'public'
                               ? Icons.work
                               : _gx.mainItems[index][0].toString() == 'fun'
                                   ? Icons.code
@@ -31,7 +35,9 @@ class MainListView extends StatelessWidget {
                                       : Icons.auto_awesome_motion),
                       title: Transform.translate(
                         offset: Offset(-20, 0),
-                        child: Text(_gx.mainItems[index][1]),
+                        child: _gx.mainItems[index][1].length > 160
+                            ? Text(_gx.mainItems[index][1].substring(1, 150))
+                            : Text(_gx.mainItems[index][1]),
                       ),
                       onLongPress: () {
                         Get.toNamed('/r/detail_halgeri', arguments: index);
