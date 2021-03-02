@@ -17,6 +17,7 @@ class DetailDialog extends StatelessWidget {
     _gx.mainCreateTime(_gx.mainItems[data][2]);
     textContent.text = _gx.mainItems[data][1];
     _gx.mainGubun(_gx.mainItems[data][0]);
+    _gx.mainDan(_gx.mainItems[data][3]);
     _gx.subItems.clear();
 
     DBHelper db = DBHelper();
@@ -109,24 +110,38 @@ class DetailDialog extends StatelessWidget {
                       border: const OutlineInputBorder(),
                     ),
                     controller: textContent,
-                    maxLines: 12,
+                    maxLines: 11,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      Text(_gx.mainCreateTime.toString()),
+                      SizedBox(width: 20),
+                      IconButton(
+                          icon: Icon(Icons.airplay),
+                          onPressed: () {
+                            Get.toNamed('/r/view_item', arguments: textContent.text);
+                          }),
+                      SizedBox(width: 10),
                       IconButton(
                           icon: Icon(Icons.download_done_outlined),
                           onPressed: () {
-                            db.insert('''update halgeri_main
-                                          set dan = 'end'
-                                          where createTime = ?
-                                          ''', [_gx.mainCreateTime.toString()]);
+                            print(_gx.mainDan);
+                            String danInit = 'end';
+                            if (_gx.mainDan.toString() == 'end'){
+                              danInit = 'reNull';
+                            }
 
-                            db.selectListMainBack('end');
+                            db.insert('''update halgeri_main
+                                          set dan = ?
+                                          where createTime = ?
+                                          ''', [danInit, _gx.mainCreateTime.toString()]);
+
+                            db.selectListMainBack(_gx.mainItems[data][0]);
 
                             Navigator.of(context).pop();
                           }),
-                      SizedBox(width: 20),
+                      SizedBox(width: 10),
                       IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
@@ -198,9 +213,10 @@ class DetailDialog extends StatelessWidget {
                           itemCount: _gx.subItems.length,
                           itemBuilder: (BuildContext context, int index) {
                             return ListTile(
-                              title: _gx.subItems[index][1].length > 110
+                              dense: true,
+                              title: _gx.subItems[index][1].length > 40
                                   ? Text(
-                                      _gx.subItems[index][1].substring(1, 100))
+                                      _gx.subItems[index][1].substring(0, 38))
                                   : Text(_gx.subItems[index][1]),
                               subtitle: Text(_gx.subItems[index][2]),
                               onLongPress: () {

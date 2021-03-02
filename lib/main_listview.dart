@@ -22,6 +22,7 @@ class MainListView extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     child: ListTile(
+                      dense: true,
                       tileColor: Colors.grey[30],
                       leading: Icon(_gx.mainItems[index][0].toString() ==
                               'private'
@@ -33,10 +34,12 @@ class MainListView extends StatelessWidget {
                                   : _gx.mainItems[index][0].toString() == 'memo'
                                       ? Icons.article_outlined
                                       : Icons.auto_awesome_motion),
+                        trailing: Text( _gx.mainItems[index][4].toString(),
+                        style: TextStyle(fontSize: 10),),
                       title: Transform.translate(
                         offset: Offset(-20, 0),
-                        child: _gx.mainItems[index][1].length > 160
-                            ? Text(_gx.mainItems[index][1].substring(1, 150))
+                        child: _gx.mainItems[index][1].length > 40
+                            ? Text(_gx.mainItems[index][1].substring(0, 38))
                             : Text(_gx.mainItems[index][1]),
                       ),
                       onLongPress: () {

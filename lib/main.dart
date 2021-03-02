@@ -7,6 +7,7 @@ import 'halgeri_drawer.dart';
 import 'input_dialog.dart';
 import 'search_dialog.dart';
 import 'detail_halgeri.dart';
+import 'view_item.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: () => HomePage()),
         GetPage(name: '/r/detail_halgeri', page: () => DetailDialog()),
+        GetPage(name: '/r/view_item', page: () => ViewItem()),
       ],
     );
   }

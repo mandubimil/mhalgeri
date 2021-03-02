@@ -18,7 +18,7 @@ class BottomNavi extends StatelessWidget {
                 icon: Icon(Icons.auto_awesome_motion),
                 onPressed: () {
                   db.selectListMain(
-                      '''select * from halgeri_main where gubun != 'memo' and dan is null order by createTime desc''',
+                      '''select * from halgeri_main where gubun != 'memo' and (dan != 'end' or dan is null) order by createTime desc''',
                       [],
                       'all');
                 }),
@@ -29,7 +29,7 @@ class BottomNavi extends StatelessWidget {
                 icon: Icon(Icons.person),
                 onPressed: () {
                   db.selectListMain(
-                      '''select * from halgeri_main where gubun = ? and dan is null order by createTime desc''',
+                      '''select * from halgeri_main where gubun = ?  and (dan != 'end' or dan is null) order by createTime desc''',
                       ['private'],
                       'private');
                 }),
@@ -40,7 +40,7 @@ class BottomNavi extends StatelessWidget {
                 icon: Icon(Icons.work),
                 onPressed: () {
                   db.selectListMain(
-                      '''select * from halgeri_main where gubun = ? and dan is null order by createTime desc''',
+                      '''select * from halgeri_main where gubun = ? and (dan != 'end' or dan is null) order by createTime desc''',
                       ['public'],
                       'public');
                 }),
@@ -51,7 +51,7 @@ class BottomNavi extends StatelessWidget {
                 icon: Icon(Icons.code),
                 onPressed: () {
                   db.selectListMain(
-                      '''select * from halgeri_main where gubun = ? and dan is null order by createTime desc''',
+                      '''select * from halgeri_main where gubun = ? and (dan != 'end' or dan is null) order by createTime desc''',
                       ['fun'],
                       'fun');
                 }),
@@ -73,7 +73,7 @@ class BottomNavi extends StatelessWidget {
                 icon: Icon(Icons.article_outlined),
                 onPressed: () {
                   db.selectListMain(
-                      '''select * from halgeri_main where gubun = ? and dan is null order by createTime desc''',
+                      '''select * from halgeri_main where gubun = ? and (dan != 'end' or dan is null) order by createTime desc''',
                       ['memo'],
                       'memo');
                 }),
@@ -81,3 +81,5 @@ class BottomNavi extends StatelessWidget {
         ));
   }
 }
+
+

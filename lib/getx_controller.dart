@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 class GC extends GetxController {
   RxList<List<String>> mainItems = [
-    ['gubun', 'content', '0']
+    ['gubun', 'content', '0','dan', '0']
   ].obs;
   RxList<List<String>> subItems = [
     ['gubun', 'content', '0']
@@ -12,6 +12,7 @@ class GC extends GetxController {
   RxString radioGubun = 'fun'.obs;
   RxString mainCreateTime = 'time'.obs;
   RxString mainGubun = 'gubun'.obs;
+  RxString mainDan = 'dan'.obs;
   RxString subContent = 'content'.obs;
   RxString subCreateTime = 'time'.obs;
 
